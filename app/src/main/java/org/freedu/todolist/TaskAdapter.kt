@@ -1,5 +1,6 @@
 package org.freedu.todolist
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +19,13 @@ class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskAdap
         fun onDeleteClick(position: Int)
     }
 
+    interface OnCheckedChangeListener {
+        fun onCheckedChange(position: Int, isChecked: Boolean)
+    }
+
     private var editClickListener: OnEditClickListener? = null
     private var deleteClickListener: OnDeleteClickListener? = null
+    private var checkedChangeListener: OnCheckedChangeListener? = null
 
     fun setOnEditClickListener(listener: OnEditClickListener) {
         editClickListener = listener
@@ -28,6 +34,11 @@ class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskAdap
     fun setOnDeleteClickListener(listener: OnDeleteClickListener) {
         deleteClickListener = listener
     }
+    fun setOnCheckedChangeListener(listener: OnCheckedChangeListener) {
+        checkedChangeListener = listener
+    }
+
+
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.textViewTaskTitle)
@@ -54,7 +65,13 @@ class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskAdap
         holder.deleteButton.setOnClickListener {
             deleteClickListener?.onDeleteClick(position)
         }
+
+        holder.checkBoxTask.setOnCheckedChangeListener { _, isChecked ->
+            checkedChangeListener?.onCheckedChange(position, isChecked)
+        }
+
     }
+
 
     override fun getItemCount(): Int {
         return tasks.size

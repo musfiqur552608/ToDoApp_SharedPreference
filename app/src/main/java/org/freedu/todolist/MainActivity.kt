@@ -76,6 +76,15 @@ class MainActivity : AppCompatActivity() {
                 alertDialog.show()
             }
         })
+
+        adapter.setOnCheckedChangeListener(object : TaskAdapter.OnCheckedChangeListener {
+            override fun onCheckedChange(position: Int, isChecked: Boolean) {
+                // Handle task completion
+                tasks[position].isComplete = isChecked
+                saveTasksToSharedPreferences()
+            }
+        })
+
     }
     private fun deleteTask(position: Int) {
         // Implement logic to delete the task
